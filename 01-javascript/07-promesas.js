@@ -15,7 +15,7 @@ function promesaElevarAlCuadrado(numero){
 }
 
 
-promesaEsPar(numero:4)
+promesaEsPar(4)
 .then(
   (data)=>{
     console.log('DATA',data);
@@ -41,7 +41,7 @@ promesaEsPar(numero:4)
   (error)=>{console.error('ERROR', error);}
 )
 .finally( //finally
-  onFinally:()=>{console.log('Finally');}
+  ()=>{console.log('Finally');}
 );
 
 
