@@ -55,6 +55,7 @@ function ejercicio08(path, contenidoArchivo){
         )
 }
 
+
 ejercicio08('./06-ejemplo.txt','lo logramos!')
     .then(
         (data) => {
@@ -64,3 +65,20 @@ ejercicio08('./06-ejemplo.txt','lo logramos!')
     .catch(
         (error)=>{console.error('ERROR', error);}
     )
+
+//ASYNC AWAIT
+async function asyncAwaitUno(path, nuevoContenido){
+    try {
+        const respuestaContenidoArchivoOriginal = await leerArchivo(path); //espera una respuesta
+        await escribirArchivo(path, respuestaContenidoArchivoOriginal+nuevoContenido);
+        //await escribirArchivo(path, await leerArchivo(path)+nuevoContenido);
+    }catch (error){
+        console.error(error);
+    }
+}
+
+asyncAwaitUno('06-ejemplo.txt','lo logramos')
+const asyncAwaitDos = async function () {}
+const asynAwaitTres = async () =>{}
+
+
