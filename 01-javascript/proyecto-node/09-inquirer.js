@@ -12,7 +12,10 @@ async function main(){
                     name:'apellido',
                     message:'Ingresa Tu nombre'
                 },
-                {name:'edaad'}
+                {type:'input',
+                    name:'edaad',
+                    message:'Ingresa tu edad'
+                }
             ]);
         console.log('Respuesta', respuesta);
     }catch(e){
