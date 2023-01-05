@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-function promesasEsPar(numero){// f->devuelve una promesa
+function promesaEsPar(numero){// f->devuelve una promesa
   const miPrimerPromesa = new Promise(
     (resolve, reject)=>{
       if(numero%2 === 0){resolve(numero); /*return (then)*/}

@@ -9,7 +9,7 @@ function leerArchivo(path){
     const miPrimerPromesa = new Promise(
         (resolve, reject)=>{
             fs.readFile(
-                './06-ejemplo.txt',//nombre o path del archivo
+                path,//nombre o path del archivo
                 'utf-8',//codificación
 
                 (errorLecturaPrimerArchivo , contenidoPrimerArchivo) =>{//callback
