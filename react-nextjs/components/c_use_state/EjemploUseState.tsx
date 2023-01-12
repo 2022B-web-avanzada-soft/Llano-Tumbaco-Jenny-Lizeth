@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {event} from "next/dist/build/output/log";
 
 interface Usuario{
@@ -16,19 +16,53 @@ export default function (){
         edad: 22,
         casado: true,
     } as Usuario)
-    setUsuario({nombre:"Liz",edad:22,casado:false, hijos: []})
+
+    //ayuda a escuchar los cambios de las variables
+    useEffect(
+        ()=>{
+            console.log('Inicio el componente', numero, usuario);
+        },
+        [] //arreglo variables
+        //si está vacío se ejecuta una vez
+    );
+    useEffect(
+        ()=>{
+            console.log('Cambio número', numero);
+        },
+        [numero] //arreglo variables
+    );
+    useEffect(
+        ()=>{
+            console.log('Cambio arregloNumeros', arregloNumeros);
+        },
+        [arregloNumeros] //arreglo variables
+    );
+    useEffect(
+        ()=>{
+            console.log('Cambio usuario', usuario);
+        },
+        [usuario] //arreglo variables
+    );
+    useEffect(
+        ()=>{
+            console.log('Cambio todo', numero, arregloNumeros, usuario);
+        },
+        [numero, arregloNumeros, usuario] //arreglo variables
+    );
+
+    //setUsuario({nombre:"Liz",edad:22,casado:false, hijos: []})
     return (<>
-        <button className="bg-blue-500" onClick={(event)=>{
+        <button className="bg-blue-500 m-5" onClick={(event)=>{
             event.preventDefault();
             setNumero(numero+1);
         }}>Numero</button>
-        <button className="bg-blue-500" onClick={(event)=>{
+        <button className="bg-blue-500 m-5" onClick={(event)=>{
             event.preventDefault();
             setArregloNumeros([...arregloNumeros,1])
         }}>Arreglo</button>
-        <button className="bg-blue-500" onClick={(event)=>{
+        <button className="bg-blue-500 m-5" onClick={(event)=>{
             event.preventDefault();
-            let usuarioNuevo = {...usuario, nombre: new Date.toString()};
+            let usuarioNuevo = {...usuario, nombre: new Date().toString()};
             setUsuario(usuarioNuevo);
         }
         }>Usuario</button>
