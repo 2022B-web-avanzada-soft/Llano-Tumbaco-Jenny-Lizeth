@@ -1,15 +1,12 @@
 import useSelectMoneda from "../hooks/useSelectMoneda";
 import {useEffect} from "react";
+import {MONEDAS} from "./Monedas";
 
 export default function () {
     const [moneda, UseSelectMonedas] = useSelectMoneda(
         'Moneda',
-        [
-            {id: 'USD', nombre: 'Dolar Estados Unidos'},
-            {id: 'MXN', nombre: 'Peso mexicano'},
-            {id: 'EUR', nombre: 'Euro'},
-            {id: 'GDP', nombre: 'Libra esterlina'},
-        ]
+        MONEDAS
+
     )
     useEffect(
         ()=>{
