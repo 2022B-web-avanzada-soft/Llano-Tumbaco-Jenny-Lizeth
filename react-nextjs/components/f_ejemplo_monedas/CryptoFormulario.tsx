@@ -4,8 +4,10 @@ import {MonedasInterface} from "../../interfaces/moneda";
 import useSelectMoneda from "../hooks/useSelectMoneda";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
+import {ConsultaMoneda} from "../../pages/f_ejemplo_criptomonedas";
 
-export default function ({setMonedas}){
+export default function (params){
+    const {setMonedas} = params
     const [monedasArreglo, setMonedasArreglo]=useState(MONEDAS)
     const [criptoMonedasArreglo, setCriptoMonedasArreglo] = useState([]as MonedasInterface[])
     const [valorMoneta, SelectMonedaComponente] = useSelectMoneda(
@@ -43,13 +45,18 @@ export default function ({setMonedas}){
 
     const manejarSubmitFormulario = (e) => {
         e.preventDefault();
+        const monedasConsulta: ConsultaMoneda = {
+            valorCriptoMoneda:valorCriptoMoneda as string,
+            valorMoneda: valorMoneta as string
+        }
+        setMonedas(monedasConsulta)
     }
 
     return(
         <>
             <form onSubmit={manejarSubmitFormulario}>
-                {SelectMonedaComponente}
-                {SelectCriptoMonedaComponente}
+                {SelectMonedaComponente} //si cambia algo de aqui
+                {SelectCriptoMonedaComponente}//entonces va a cambiar aqui
                 <br/>
                 <button className={"btn btn-primary w-100"} type={'submit'}>
                     Consultar
