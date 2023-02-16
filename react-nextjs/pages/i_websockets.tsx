@@ -11,6 +11,12 @@ export interface FormularioModelo{
     nombre:string;
     mensaje:string;
 }
+export type MensajeSala = FormularioModelo;
+export type MensajeSala2 = {
+    salaId:string;
+    nombre:string;
+    mensaje:string;
+}
 export default function(){
     const [isConnected, setIsConnected] = useState(socket.connect)
     const [mensajes, setMensajes] = useState([] as MensajeChatProps[]);
@@ -44,10 +50,25 @@ export default function(){
                 setMensajes((mensajesAnteriores)=>[...mensajesAnteriores, nuevoMensaje])
             });
             socket.on('escucharEventoUnirseSala',(data:{mensaje:string})=>{
-                console.log('escucharEventoUnirseSala');
+                const nuevoMensaje: MensajeChatProps = {
+                    mensaje:data.mensaje,
+                    nombre:'Sistema',
+                    posicion:'I'
+                };
+                setMensajes((mensajesanteriores)=>[...mensajesanteriores,
+                nuevoMensaje]);
+
             });
             socket.on('escucharEventoMensajeSala',(data:{mensaje:string})=>{
-                console.log('escucharEventoMensajeSala');
+                const nuevoMensaje: MensajeChatProps={
+                    mensaje:data.salaId+'-'+data.mensaje,
+                    nombre:data.nombre,
+                    posicion:'I'
+                };
+                setMensajes((mensajesAnteriores)=>[...mensajesAnteriores,
+                nuevoMensaje])
+                console.log('escucharEventoMensajeSala')
+
             });
         },
         []
@@ -70,7 +91,7 @@ export default function(){
     }
 
     const unirseSala0EnviarMensajeASala = (data:FormularioModelo) =>{
-        if(data.mensaje !== ''){
+        if(data.mensaje === ''){
             //unimos a la sala
             const dataEventoUnirseSala ={
                 salaId:data.salaId,
