@@ -23,7 +23,7 @@ export default function (){
             <Layout title={"To-do's"}>
                 <h1>To do's</h1>
                 {arregloTodos.map(
-                    (todo: Todo)=>{
+                    (todo)=>{
                         return (<li key={todo.id}>
                             {todo.id}-{todo.completed}-
                             <a href={'/i_todos/'+todo.id}>

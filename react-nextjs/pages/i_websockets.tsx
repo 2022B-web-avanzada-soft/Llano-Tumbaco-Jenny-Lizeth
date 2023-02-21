@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import MensajeChat, {MensajeChatProps} from "../components/i_websockets/MensajeChat";
 import {useForm} from "react-hook-form";
 import Layout from "../components/Layout";
-const servidorWebsocket = 'htt://localhost:8080';
+const servidorWebsocket = 'http://localhost:11202';
 const socket = io(servidorWebsocket);
 
 export interface FormularioModelo{
@@ -18,206 +18,224 @@ export type MensajeSala2 = {
     mensaje:string;
 }
 export default function(){
-    const [isConnected, setIsConnected] = useState(socket.connect)
+    const [isConnected, setIsConnected] = useState(socket.connected)
     const [mensajes, setMensajes] = useState([] as MensajeChatProps[]);
 
-    const {control, register, handleSubmit, formState:{errors,isValid}} = useForm({
-        defaultValues:{
-            salaId:'',
-            nombre:'',
-            mensaje:'',
+    const {control, register, handleSubmit, formState: {errors, isValid}} = useForm({
+        defaultValues: {
+            salaId: '',
+            nombre: '',
+            mensaje: '',
         },
-        mode:'all'
+        mode: 'all'
     })
 
     useEffect(
-        ()=>{
-            socket.on('connect',()=>{
+        () => {
+
+            socket.on('connect', () => {
                 setIsConnected(true);
                 console.log('Si esta conectado');
             });
-            socket.on('disconnect', () =>{
+            socket.on('disconnect', () => {
                 setIsConnected(false);
-                console.log('No está conectado');
+                console.log('No esta conectado');
             });
-            socket.on('escucharEventHola',(data:{mensaje:string})=>{
+            socket.on('escucharEventoHola', (data: { mensaje: string }) => {
                 console.log('escucharEventoHola');
-                const nuevoMensaje: MensajeChatProps={
-                    mensaje:data.mensaje,
-                    nombre:'Sistema',
-                    posicion:'I'
-                }
-                setMensajes((mensajesAnteriores)=>[...mensajesAnteriores, nuevoMensaje])
-            });
-            socket.on('escucharEventoUnirseSala',(data:{mensaje:string})=>{
                 const nuevoMensaje: MensajeChatProps = {
-                    mensaje:data.mensaje,
-                    nombre:'Sistema',
-                    posicion:'I'
+                    mensaje: data.mensaje,
+                    nombre: 'Sistema',
+                    posicion: 'I'
                 };
-                setMensajes((mensajesanteriores)=>[...mensajesanteriores,
-                nuevoMensaje]);
+                setMensajes((mensajesAnteriores) => [...mensajesAnteriores, nuevoMensaje]);
+            });
+            socket.on('escucharEventoUnirseSala', (data: { mensaje: string }) => {
+                const nuevoMensaje: MensajeChatProps = {
+                    mensaje: data.mensaje,
+                    nombre: 'Sistema',
+                    posicion: 'I'
+                };
+                setMensajes((mensajesAnteriores) => [...mensajesAnteriores,
+                    nuevoMensaje]);
+            });
+            socket.on('escucharEventoMensajeSala', (data: MensajeSala) => {
+
+                const nuevoMensaje: MensajeChatProps = {
+                    mensaje: data.salaId + ' - ' + data.mensaje,
+                    nombre: data.nombre,
+                    posicion: 'I'
+                };
+                setMensajes((mensajesAnteriores) => [...mensajesAnteriores,
+                    nuevoMensaje]);
+                console.log('escucharEventoMensajeSala');
 
             });
-            socket.on('escucharEventoMensajeSala',(data:{mensaje:string})=>{
-                const nuevoMensaje: MensajeChatProps={
-                    mensaje:data.salaId+'-'+data.mensaje,
-                    nombre:data.nombre,
-                    posicion:'I'
-                };
-                setMensajes((mensajesAnteriores)=>[...mensajesAnteriores,
-                nuevoMensaje])
-                console.log('escucharEventoMensajeSala')
 
-            });
         },
         []
     )
 
     const enviarEventoHola = () => {
         const nuevoMensaje: MensajeChatProps = {
-            mensaje:'Adrian',
+            mensaje: 'Adrian',
             nombre: 'Sistema',
-            posicion:'I'
+            posicion: 'I'
         };
         socket.emit(
-            'hola', //Nombre evento
-            nuevoMensaje, //datos evento
-            (datosEventoHola) => {//calback o respuesta del evento
-                console.log(datosEventoHola) //{mensaje:'ok'}
-                setMensajes((mensajesAnteriores)=>[...mensajesAnteriores, nuevoMensaje]);
+            'hola', // Nombre Evento
+            nuevoMensaje, //  Datos evento
+            (datosEventoHola) => { // Callback o respuesta del evefnto
+                console.log(datosEventoHola) // {mensaje: 'ok'};
+                //      LAS DOS FORMAS HACEN LO MISMO, pero el callback es en casos especiales
+                //     const [nombre, setNombre] = useState('Adrian')
+                //      setNombre('Vicente')
+                //     const [arreglo, setArreglo] = useState([1,2])
+                //      setArreglo( [1,2,3] ) // Metodo1: SIN CALLBACK
+                //      setArreglo( ([1,2])=> [ ...[1,2], 3 ]) => [1,2,3] // Metodo2: CON CALLBACK
+                setMensajes((mensajesAnteriores) => [...mensajesAnteriores, nuevoMensaje]);
             }
         )
     }
 
-    const unirseSala0EnviarMensajeASala = (data:FormularioModelo) =>{
-        if(data.mensaje === ''){
-            //unimos a la sala
-            const dataEventoUnirseSala ={
-                salaId:data.salaId,
-                nombre:data.nombre,
-            }
-            socket.emit(
-                'unirseSala',//nombre eventi
-                dataEventoUnirseSala,//datos evento
-                ()=>{//callback o respuesta del evento
-                    const nuevoMensaje: MensajeChatProps={mensaje:'Bienvenido a la sala'+dataEventoUnirseSala.salaId,
-                    nombre:'Sistema',
-                    posicion:'I'
-                    };
-                    setMensajes((mensajesAnteriores)=>[...mensajesAnteriores,nuevoMensaje])
-
-                }
-            )
-        }else{
-            //mandamos mensaje
-            const dataEventoEnviarMensajeSala = {
-               salaId:data.salaId,
-               nombre:data.nombre,
-               mensaje:data.mensaje
+    const unirseSalaOEnviarMensajeASala = (data: FormularioModelo) => {
+        if (data.mensaje === '') {
+            // unimos a la sala
+            const dataEventoUnirseSala = {
+                salaId: data.salaId,
+                nombre: data.nombre,
             };
             socket.emit(
-                'enviarMensaje',//nombre eventi
-                dataEventoEnviarMensajeSala,//datos evento
-                ()=>{//callback o respuesta del evento
-                    const nuevoMensaje: MensajeChatProps={
-                        mensaje:data.salaId+'-'+data.mensaje,
-                        nombre:data.nombre,
-                        posicion:'D'
+                'unirseSala', // Nombre Evento
+                dataEventoUnirseSala, //  Datos evento
+                () => { // Callback o respuesta del evefnto
+                    const nuevoMensaje: MensajeChatProps = {
+                        mensaje: 'Bienvenido a la sala ' + dataEventoUnirseSala.salaId,
+                        nombre: 'Sistema',
+                        posicion: 'I'
                     };
-                    setMensajes((mensajesAnteriores)=>[...mensajesAnteriores,nuevoMensaje])
-
+                    setMensajes((mensajesAnteriores) => [...mensajesAnteriores, nuevoMensaje]);
                 }
-            )
+            );
+        } else {
+            // mandamos mensaje
+            const dataEventoEnviarMensajeSala = {
+                salaId: data.salaId,
+                nombre: data.nombre,
+                mensaje: data.mensaje
+            };
+            socket.emit(
+                'enviarMensaje', // Nombre Evento
+                dataEventoEnviarMensajeSala, //  Datos evento
+                () => { // Callback o respuesta del evefnto
+                    const nuevoMensaje: MensajeChatProps = {
+                        mensaje: data.salaId + ' - ' + data.mensaje,
+                        nombre: data.nombre,
+                        posicion: 'D'
+                    };
+                    setMensajes((mensajesAnteriores) => [...mensajesAnteriores, nuevoMensaje]);
+                }
+            );
         }
     }
 
-    return(<>
-        <Layout title="Formulario">
-            <h1>Websockets</h1>
-            <button className={'btn btn-success'} onClick={()=>enviarEventoHola()}>Enviar evento hola</button>
-            <div className="row">
-                <div className="col-sm-6">
-                    <h1>Formulario</h1>
-                    <div className ="row">
-                        <div className="col-sm-6">
-                            <form onSubmit={handleSubmit(unirseSala0EnviarMensajeASala)}>
-                                <div className="mb-3">
-                                    <label htmlFor="salaId" className="form-label">Sala ID</label>
-                                    <input type="text"
-                                    className="form-control"
-                                    placeholder="Ej:1234"
-                                    id="salaId"
-                                           {...register('salaId',{required:'IngresarSalaId'})}
-                                        aria-describedby="salaIdHelp"/>
-                                    <div id="salaIdHelp" className="form-text">
-                                        Ingresa tu idSala
-                                    </div>
-                                    {errors.salaId &&
-                                    <div className="alert alert-warning" role="alert">
-                                        Tiene errore {errors.salaId.message}
-                                    </div>
-                                    }
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="nombre" className="form-label">Sala ID</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           placeholder="Ej:1234"
-                                           id="nombre"
-                                           {...register('nombre',{required:'IngresarNombre'})}
-                                           aria-describedby="nombreHelp"/>
-                                    <div id="nombreHelp" className="form-text">
-                                        Ingresa tu idSala
-                                    </div>
-                                    {errors.salaId &&
-                                        <div className="alert alert-warning" role="alert">
-                                            Tiene errore {errors.nombre.message}
+    const estaConectado = ()=>{
+        if(isConnected){
+            return <span>Conectado :)</span>
+        }else{
+            return <span>Desconectado :(</span>
+        }
+    }
+
+    return (
+        <>
+            <Layout title="Formulario">
+                <h1>Websockets</h1>
+                <p><strong>{estaConectado()}</strong></p>
+                <button className={'btn btn-success'} onClick={() => enviarEventoHola()}>Enviar evento hola</button>
+                <div className="row">
+                    <div className="col-sm-6">
+                        <h1>FORMULARIO</h1>
+
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <form onSubmit={handleSubmit(unirseSalaOEnviarMensajeASala)}>
+                                    <div className="mb-3">
+                                        <label htmlFor="salaId" className="form-label">Sala ID</label>
+                                        <input type="text"
+                                               className="form-control"
+                                               placeholder="EJ: 1234"
+                                               id="salaId"
+                                               {...register('salaId',{required: 'Ingresar salaId'})}
+                                               aria-describedby="salaIdHelp"/>
+                                        <div id="salaIdHelp" className="form-text">
+                                            Ingresa tu idSala.
                                         </div>
-                                    }
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="mensaje" className="form-label">Sala ID</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           placeholder="Ej:1234"
-                                           id="mensaje"
-                                           {...register('mensaje',{required:'IngresarMensaje'})}
-                                           aria-describedby="mensajeHelp"/>
-                                    <div id="mensajeHelp" className="form-text">
-                                        Ingresa tu idSala
+                                        {errors.salaId &&
+                                            <div className="alert alert-warning" role="alert">
+                                                Tiene errores {errors.salaId.message}
+                                            </div>
+                                        }
                                     </div>
-                                    {errors.salaId &&
-                                        <div className="alert alert-warning" role="alert">
-                                            Tiene errore {errors.mensaje.message}
+                                    <div className="mb-3">
+                                        <label htmlFor="nombre" className="form-label">Nombre</label>
+                                        <input type="text"
+                                               className="form-control"
+                                               placeholder="EJ: Adrian"
+                                               id="nombre"
+                                               {...register('nombre', {required: 'Nombre requerido'})}
+                                               aria-describedby="nombreHelp"/>
+                                        <div id="nombreHelp" className="form-text">
+                                            Ingresa tu nombre.
                                         </div>
-                                    }
-                                </div>
-                                <button type="submit"
-                                    disabled={!isValid}
-                                className="btn btn-warning">
-                                    Unirse Sala
-                                </button>
-                                <button type="reset"
-                                        className="btn btn-danger">
-                                    Reset
-                                </button>
-                            </form>
+                                        {errors.nombre &&
+                                            <div className="alert alert-warning" role="alert">
+                                                Tiene errores {errors.nombre.message}
+                                            </div>
+                                        }
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="mensaje" className="form-label">Mensaje</label>
+                                        <input type="text"
+                                               className="form-control"
+                                               placeholder="EJ: Mensaje"
+                                               id="mensaje"
+                                               {...register('mensaje')}
+                                               aria-describedby="mensajeHelp"/>
+                                        <div id="mensajeHelp" className="form-text">
+                                            Ingresa tu mensaje.
+                                        </div>
+                                        {errors.mensaje &&
+                                            <div className="alert alert-warning" role="alert">
+                                                Tiene errores {errors.mensaje.message}
+                                            </div>
+                                        }
+                                    </div>
+                                    <button type="submit"
+                                            disabled={!isValid}
+                                            className="btn btn-warning">
+                                        Unirse sala
+                                    </button>
+                                    <button type="reset"
+                                            className="btn btn-danger">
+                                        Reset
+                                    </button>
+                                </form>
+                            </div>
                         </div>
+
+                    </div>
+                    <div className="col-sm-6">
+                        {mensajes.map((mensaje, indice) =>
+                            <MensajeChat key={indice}
+                                         mensaje={mensaje.mensaje}
+                                         nombre={mensaje.nombre}
+                                         posicion={mensaje.posicion}
+                            />)
+                        }
                     </div>
                 </div>
-
-                <div className="col.sm.6">
-                    {mensajes.map((mensaje,indice)=>
-                    <MensajeChat key={indice}
-                            mensaje={mensaje.mensaje}
-                        nombre={mensaje.nombre}
-                        posicion={mensaje.posicion}
-                        />)
-                    }
-                </div>
-
-            </div>
-        </Layout>
-    </>)
+            </Layout>
+        </>
+    )
 }
