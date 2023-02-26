@@ -11,17 +11,16 @@ import {Server, Socket} from "socket.io";
 )
 export class EventosGateway{
     @SubscribeMessage('comprarGuitarra') // Nombre del metodo para recibir eventos
-    devolverHola(
+    devolverCantidad(
         @MessageBody()
-            message: { salaId: string, nombre: string, mensaje: string },
+            message: {nombre: string, mensaje: string },
         @ConnectedSocket()
             socket: Socket // import {Server, Socket} from 'socket.io';
     ) {
         // backend
         const mensajeSala = {
             nombre: message.nombre,
-            mensaje: message.mensaje,
-            salaId: message.salaId
+            mensaje: message.mensaje
         };
         socket.broadcast
             .emit('escucharEventoCantidad', //  Nombre evento que vamos a enviar a los clientes conectados

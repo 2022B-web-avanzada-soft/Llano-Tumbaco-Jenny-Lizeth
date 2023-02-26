@@ -7,7 +7,6 @@ const servidorWebsocket = 'http://localhost:11202';
 const socket = io(servidorWebsocket);
 
 export interface FormularioModelo{
-    salaId: string;
     nombre:string;
     mensaje:string;
 }
@@ -20,10 +19,12 @@ export default function(){
         nombre: 'Sistema'
     };
     const [mensajes, setMensajes] = useState([inicioCantidad] as MensajeChatProps[]);
+
+    //Guitarra 1
     const [cantidad, setCantidad] = useState(10)
+
     const {register, handleSubmit, formState: {errors, isValid}} = useForm({
         defaultValues: {
-            salaId: '',
             nombre: '',
             mensaje: '',
         },
@@ -54,7 +55,6 @@ export default function(){
     )
     const actualizarCantidadNumGuitarras = (data: FormularioModelo) => {
         const nuevoMensaje= {
-            salaId: 1,
             nombre: data.nombre,
             mensaje: (cantidad-parseInt(data.mensaje))
         };
@@ -79,7 +79,7 @@ export default function(){
                     <div className="col-sm-6">
                         <div className="mb-3">
                             <img
-                            className="rounded" width="500" height="450"
+                            className="rounded" width="500" height="325"
                             src="https://www.culturasonora.es/wp-content/uploads/2019/09/Yamaha-C40-1.jpg" alt=""/>
                         </div>
                     </div>
@@ -119,7 +119,9 @@ export default function(){
                         </div>
                     </div>
                 </div>
+
             </Layout>
+
             <hr />
         </>
     )
