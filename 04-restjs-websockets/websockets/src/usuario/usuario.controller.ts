@@ -5,13 +5,15 @@ import {
     Delete,
     Get,
     HttpCode,
-    Param, Post, Put,
+    Param, Post, Put, Query,
     UnauthorizedException
 } from "@nestjs/common";
 import {UsuarioService} from "./usuario.service";
 import {UsuarioCreateDto} from "./dto/usuario-create.dto";
 import {UsuarioUpdateDto} from "./dto/usuario-update.dto";
 import {validate} from "class-validator";
+import {FindManyOptions, FindOptionsWhere, Like} from "typeorm";
+import {UsuarioEntity} from "./usuario.entity";
 @Controller('usuario')
 // http://localhost:3000/usuario/
 // @Controller('usuario/asd/qwe')
@@ -65,16 +67,6 @@ export class UsuarioController{
         );
     }
 
-
-
-
-
-
-
-
-
-
-
     @Post("/") // POST /usuario
     @HttpCode(201)
     async create(
@@ -94,5 +86,38 @@ export class UsuarioController{
             });
         }
         return this.usuarioService.create(nuevoRegistro);
+    }
+
+    @Get("/") //get/usuario
+    @HttpCode(200)
+    find(
+        @Query() queryParams
+    ){
+        const consulta: FindManyOptions<UsuarioEntity> = {
+            //select: ['id'], //select
+            //reations: {//relaciones
+            //notas:true
+            //},
+            skip: queryParams.skip ? + queryParams.skip:0, //2*0=0,2*1=2,2*2=4
+            take: queryParams.take?+queryParams.take:10
+        };
+        const consultaWhere = [] as FindOptionsWhere<UsuarioEntity>[]
+        //si es que nos mandaron nombre entonces se ejecuta la consulta
+        if(queryParams.nombres){
+            consultaWhere.push({
+                nombres:Like('%'+queryParams.nombres+'%'),
+                rol:queryParams.rol? queryParams.rol:undefined,
+            })
+        }
+        if(queryParams.apellidos){
+            consultaWhere.push({
+                apellidos:Like('%'+queryParams.apellidos+'%'),
+                rol:queryParams.rol? queryParams.rol:undefined,
+            })
+        }
+        if(consultaWhere.length >0){
+            consulta.where = consultaWhere
+        }
+        return this.usuarioService.find(consulta);
     }
 }
