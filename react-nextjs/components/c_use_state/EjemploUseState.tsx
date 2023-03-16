@@ -39,7 +39,7 @@ export default function (){
     );
     useEffect(
         ()=>{
-            console.log('Cambio usuario', usuario);
+            console.log('Cambio medico', usuario);
         },
         [usuario] //arreglo variables
     );

@@ -1,0 +1,77 @@
+import React, { ReactNode } from 'react'
+import Link from 'next/link'
+import Head from 'next/head'
+
+type Props = {
+  children?: ReactNode
+  title?: string
+}
+
+const Layout = ({ children, title = 'This is the default title' }: Props) => (
+  <div>
+    <Head>
+      <title>{title}</title>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+              crossOrigin="anonymous"/>
+    </Head>
+    <header>
+
+      <div >
+          <div className="row bg-dark h-25">
+              <div className="col-sm-1 align-self-center ">
+                  <img
+                      className="rounded" width="60" height="45"
+                      src="https://cdn.create.vista.com/api/media/medium/470935690/stock-vector-acoustic-guitar-gold-plated-metalic?token=" alt=""/>
+
+              </div>
+              <div className="col-sm-5 align-self-center text-warning">
+                  <h2>BEST GUITARS</h2>
+              </div>
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Contactanos</a>
+              </div>
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Sobre Nosotros</a>
+              </div>
+              <div className="col-sm-2 align-self-center justify-content-center text-warning">
+                  <a>Ubicación</a>
+              </div>
+          </div>
+          <div className="row">
+              <img
+                  className="rounded"
+                  src="https://www.culturasonora.es/wp-content/uploads/2019/03/guitarra-acustica-portada.jpg" alt=""/>
+          </div>
+          <div className="row bg-dark h-25">
+
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Guitarras eléctricas</a>
+              </div>
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Guitarras acústicas</a>
+              </div>
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Guitarras flamencas</a>
+              </div>
+              <div className="col-sm-2 align-self-center text-warning">
+                  <a>Guitarras clásica</a>
+              </div>
+              <div className="col-sm-2 align-self-center justify-content-center text-warning">
+                  <a>Guitarras semiacústicas</a>
+              </div>
+              <div className="col-sm-2 align-self-center justify-content-center text-warning">
+                  <a>Guitarras italiana</a>
+              </div>
+          </div>
+
+
+      </div>
+    </header>
+    {children}
+  </div>
+)
+
+export default Layout

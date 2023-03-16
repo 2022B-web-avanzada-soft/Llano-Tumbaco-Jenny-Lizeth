@@ -16,7 +16,7 @@ import {FindManyOptions, FindOptionsWhere, Like} from "typeorm";
 import {UsuarioEntity} from "./usuario.entity";
 @Controller('usuario')
 // http://localhost:3000/usuario/
-// @Controller('usuario/asd/qwe')
+// @Controller('medico/asd/qwe')
 // http://localhost:3000/usuario/asd/qwe
 export class UsuarioController{
     constructor(
@@ -24,7 +24,7 @@ export class UsuarioController{
     ) {
     }
 
-    @Get("/:id") // GET /usuario/1
+    @Get("/:id") // GET /medico/1
     @HttpCode(200)
     findOneById(
         // "/:id/notas/:idNota"
@@ -33,7 +33,7 @@ export class UsuarioController{
         return this.usuarioService.findOneById (+params.id); // +"1" = 1
     }
 
-    @Delete("/:id") // DELETE /usuario/:id
+    @Delete("/:id") // DELETE /medico/:id
     @HttpCode(200)
     delete(
         // "/:id/notas/:idNota"
@@ -42,7 +42,7 @@ export class UsuarioController{
         return this.usuarioService.delete(+params.id);
     }
 
-    @Put("/:id") // PUT /usuario/:id
+    @Put("/:id") // PUT /medico/:id
     @HttpCode(200)
     async update(
         @Param() params, // {id:1}
@@ -67,7 +67,7 @@ export class UsuarioController{
         );
     }
 
-    @Post("/") // POST /usuario
+    @Post("/") // POST /medico
     @HttpCode(201)
     async create(
         @Body() bodyParams // {nombres:''....}
@@ -88,7 +88,7 @@ export class UsuarioController{
         return this.usuarioService.create(nuevoRegistro);
     }
 
-    @Get("/") //get/usuario
+    @Get("/") //get/medico
     @HttpCode(200)
     find(
         @Query() queryParams

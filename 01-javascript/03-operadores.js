@@ -123,7 +123,7 @@ console.log('arreglo', arreglo);
 
 //SOME -> expresión
 //devuelve BOOLEAN
-//hay alguna nota menor a nueve? Si No
+//hay alguna paciente menor a nueve? Si No
 //OR
 const respuestaSome =arreglo
     .some(
