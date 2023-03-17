@@ -15,7 +15,7 @@ export default function (params:ParametrosTodo){
     const router = useRouter()
     //parámetros que llegan de la ruta
     const {idTodo,nombre, apellido} = router.query
-    console.log(idTodo, nombre, apellido)
+    console.log("probando",idTodo, nombre, apellido)
     return(
         <>
             <Layout title={"To-do's hijos"}>

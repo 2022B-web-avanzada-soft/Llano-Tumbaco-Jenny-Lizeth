@@ -3,13 +3,15 @@ import {PacienteController} from "./paciente.controller";
 import {PacienteService} from "./paciente.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {PacienteEntity} from "./paciente.entity";
+import {MedicoEntity} from "../medico/medico.entity";
+import {MedicoService} from "../medico/medico.service";
 
 @Module({
-    controllers:[PacienteController],
-    providers:[PacienteService],
-    exports:[PacienteService],
+    controllers:[PacienteController, PacienteController],
+    providers:[PacienteService, MedicoService],
+    exports:[PacienteService, PacienteService],
     imports:[TypeOrmModule.forFeature(
-        [PacienteEntity],'default'//nombre cadena conexión
+        [PacienteEntity,MedicoEntity],'default'//nombre cadena conexión
     )]
 })
 export class PacienteModule {

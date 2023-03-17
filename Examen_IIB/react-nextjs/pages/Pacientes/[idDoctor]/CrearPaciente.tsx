@@ -1,15 +1,21 @@
 import Link from "next/link";
-import Layout from "../components/Layout";
+import Layout from "../../../components/Layout";
 import {useState} from "react";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 export default function (){
+    const router = useRouter()
+    //parámetros que llegan de la ruta
+    const {idDoctor} = router.query
+
     const [data, setData] = useState({
-        nombres:"",
-        especialidad:"",
-        trabaja_fin_semana:"",
-        costo_cita:"",
-        horas_trabajo:""
+        nombres_paciente:"",
+        telefono:"",
+        edad:"",
+        fecha_cita:"",
+        esta_afiliado:"",
+        medico:idDoctor
     });
 
     const handleChange = (e) => {
@@ -23,13 +29,14 @@ export default function (){
     const handleSubmit = (e) => {
         e.preventDefault();
         const userData = {
-            nombres:data.nombres,
-            especialidad:data.especialidad,
-            trabaja_fin_semana:data.trabaja_fin_semana,
-            costo_cita:parseFloat(data.costo_cita),
-            horas_trabajo:parseInt(data.horas_trabajo)
+            nombres_paciente:data.nombres_paciente,
+            telefono:data.telefono,
+            edad:parseInt(data.edad),
+            fecha_cita:data.fecha_cita,
+            esta_afiliado:data.esta_afiliado,
+            medico:idDoctor
         };
-        axios.post("http://localhost:11203/medico", userData).then((response) => {
+        axios.post("http://localhost:11203/paciente", userData).then((response) => {
             console.log(response.status);
             console.log(response.data.token);
         });
@@ -42,91 +49,89 @@ export default function (){
                 <div className="">
                     <button type="button"
                             className="btn btn-warning m-3">
-                        <Link href="/Doctores">Regresar</Link>
+                        <Link href={'/Pacientes/'+idDoctor}>Regresar</Link>
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="m-5">
                     <div className="mb-4">
                         <label
                             className="flex justify-start text-gray-800"
-                            htmlFor="nombres"
+                            htmlFor="nombres_paciente"
                         >Nombre:</label>
                         <input
                             id="nombres"
                             type="text"
                             className="mt-2 block w-full p-3 bg-gray-50"
-                            placeholder="Nombre del doctor"
-                            name="nombres"
-                            value={data.nombres}
+                            placeholder="Nombre del paciente"
+                            name="nombres_paciente"
+                            value={data.nombres_paciente}
                             onChange={handleChange}
                         />
                     </div>
                     <div className="mb-4">
                         <label
                             className=" flex justify-start text-gray-800"
-                            htmlFor="especialidad"
-                        >Especialidad:</label>
+                            htmlFor="telefono"
+                        >Telefono:</label>
                         <input
-                            id="especialidad"
+                            id="telefono"
                             type="text"
                             className="mt-2 block w-full p-3 bg-gray-50"
-                            placeholder="Especialidad del doctor"
-                            name="especialidad"
-                            value={data.especialidad}
+                            placeholder="Telefono"
+                            name="telefono"
+                            value={data.telefono}
                             onChange={handleChange}
                         />
                     </div>
                     <div className="mb-4">
                         <label
                             className=" flex justify-start text-gray-800"
-                            htmlFor="trabaja_fin_semana"
-                        >¿Trabaja fines de semana?:</label>
+                            htmlFor="edad"
+                        >Edad:</label>
                         <input
-                            id="trabaja_fin_semana"
+                            id="edad"
                             type="text"
                             className="mt-2 block w-full p-3 bg-gray-50"
-                            placeholder="Ejem: Si v No"
-                            name="trabaja_fin_semana"
-                            value={data.trabaja_fin_semana}
+                            placeholder="Edad"
+                            name="edad"
+                            value={data.edad}
                             onChange={handleChange}
                         />
                     </div>
                     <div className="mb-4">
                         <label
                             className=" flex justify-start text-gray-800"
-                            htmlFor="costo_cita"
-                        >Costo de la cita:</label>
+                            htmlFor="fecha_cita"
+                        >Fecha de la cita:</label>
                         <input
-                            id="costo_cita"
+                            id="fecha_cita"
                             type="text"
                             className="mt-2 block w-full p-3 bg-gray-50 border-2 border-black"
-                            placeholder="Ejm: 50.00"
-                            name="costo_cita"
-                            pattern="[0-9.0-9]{0,6}"
-                            value={data.costo_cita}
+                            placeholder="Ejm: 02-02-2023"
+                            name="fecha_cita"
+                            value={data.fecha_cita}
                             onChange={handleChange}
                         />
                     </div>
                     <div className="mb-4">
                         <label
                             className=" flex justify-start text-gray-800"
-                            htmlFor="horas_trabajo"
-                        >Horas de trabajo al día:</label>
+                            htmlFor="esta_afiliado"
+                        >¿Está afiliado?:</label>
                         <input
-                            id="horas_trabajo"
+                            id="esta_afiliado"
                             type="text"
                             className="mt-2 block w-full p-3 bg-gray-50 border-2 border-black"
-                            placeholder="Ejm: 8.0"
-                            name="horas_trabajo"
-                            pattern="[0-9.0-9]{0,6}"
-                            value={data.horas_trabajo}
+                            placeholder="Ejm: Si v No"
+                            name="esta_afiliado"
+                            value={data.esta_afiliado}
                             onChange={handleChange}
                         />
                     </div>
                     <div className="">
                         <button type="submit"
                                 className="btn btn-warning m-5">
-                            Crear Doctor
+                            Crear pacientes
                         </button>
                     </div>
 

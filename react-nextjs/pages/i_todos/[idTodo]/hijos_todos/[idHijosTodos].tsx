@@ -1,3 +1,3 @@
 export default function (){
-    return (<></>)
+    return (<><h1>hijos id</h1></>)
 }

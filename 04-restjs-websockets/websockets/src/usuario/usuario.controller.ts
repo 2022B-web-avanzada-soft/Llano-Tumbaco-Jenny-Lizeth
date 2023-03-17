@@ -105,7 +105,7 @@ export class UsuarioController{
         //si es que nos mandaron nombre entonces se ejecuta la consulta
         if(queryParams.nombres){
             consultaWhere.push({
-                nombres:Like('%'+queryParams.nombres+'%'),
+                nombres:queryParams.nombres,
                 rol:queryParams.rol? queryParams.rol:undefined,
             })
         }
@@ -115,9 +115,11 @@ export class UsuarioController{
                 rol:queryParams.rol? queryParams.rol:undefined,
             })
         }
+
         if(consultaWhere.length >0){
             consulta.where = consultaWhere
         }
+
         return this.usuarioService.find(consulta);
     }
 }

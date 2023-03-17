@@ -1,7 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {InjectDataSource} from "@nestjs/typeorm";
 import {DataSource, FindManyOptions} from "typeorm";
-import {MedicoEntity} from "../medico/medico.entity";
 import {PacienteEntity} from "./paciente.entity";
 
 @Injectable()

@@ -21,53 +21,10 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
 
       <div >
           <div className="row bg-dark h-25">
-              <div className="col-sm-1 align-self-center ">
-                  <img
-                      className="rounded" width="60" height="45"
-                      src="https://cdn.create.vista.com/api/media/medium/470935690/stock-vector-acoustic-guitar-gold-plated-metalic?token=" alt=""/>
-
-              </div>
-              <div className="col-sm-5 align-self-center text-warning">
-                  <h2>BEST GUITARS</h2>
-              </div>
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Contactanos</a>
-              </div>
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Sobre Nosotros</a>
-              </div>
-              <div className="col-sm-2 align-self-center justify-content-center text-warning">
-                  <a>Ubicación</a>
+              <div className="col-sm-5 align-self-center text-white">
+                  <h2>DOCTORES Y PACIENTES</h2>
               </div>
           </div>
-          <div className="row">
-              <img
-                  className="rounded"
-                  src="https://www.culturasonora.es/wp-content/uploads/2019/03/guitarra-acustica-portada.jpg" alt=""/>
-          </div>
-          <div className="row bg-dark h-25">
-
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Guitarras eléctricas</a>
-              </div>
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Guitarras acústicas</a>
-              </div>
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Guitarras flamencas</a>
-              </div>
-              <div className="col-sm-2 align-self-center text-warning">
-                  <a>Guitarras clásica</a>
-              </div>
-              <div className="col-sm-2 align-self-center justify-content-center text-warning">
-                  <a>Guitarras semiacústicas</a>
-              </div>
-              <div className="col-sm-2 align-self-center justify-content-center text-warning">
-                  <a>Guitarras italiana</a>
-              </div>
-          </div>
-
-
       </div>
     </header>
     {children}

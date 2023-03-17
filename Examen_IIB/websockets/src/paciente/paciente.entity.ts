@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {MedicoEntity} from "../medico/medico.entity";
 
 @Entity('paciente')
@@ -15,12 +15,12 @@ export class PacienteEntity {
     nombres_paciente:string;//nombre campo
 
     @Column({
-        name: 'sexo',//'nombre campo bdd'
+        name: 'telefono',//'nombre campo bdd'
         type: 'varchar',//tipo campo bdd
         length:10,
         nullable: false,//si es nullable
     })
-    sexo:string;//nombre campo
+    telefono:string;//nombre campo
 
     @Column({
         name: 'edad',//'nombre campo bdd'
